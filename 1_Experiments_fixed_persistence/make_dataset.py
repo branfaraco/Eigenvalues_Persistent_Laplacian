@@ -4,7 +4,7 @@ import pandas as pd
 import petls
 
 #  "config" inline
-out_path = "/home/bran-linux/UPM/imperial/final_project/project_repo/experiments/first_experiments/toy_dataset.parquet"
+out_path = os.path.join(os.path.dirname(__file__), "dataset.parquet")
 
 # general parameters
 n_clouds = 50
@@ -18,7 +18,7 @@ threshold = 0.6
 m_levels = 20
 dim = 1
 k_feat = 3
-nonzero_tol = 1e-3
+nonzero_tol = 1e-5
 
 
 
@@ -50,18 +50,15 @@ def main():
             # Compute a,b
             a, b = float(filt_values[i]), float(filt_values[i + 1])
 
-            eigs =  np.asarray(K.spectra(dim=dim, a=a, b=b), dtype=float)
+            eigs = np.asarray(K.spectra(dim=dim, a=a, b=b), dtype=float)   # source K_a  -> size = dim C_1^a
             nz = eigs[eigs > nonzero_tol]
-            if i < filt_values.size - 2:
-                b_next = float(filt_values[i + 2])
-                eigs_next = np.asarray(K.spectra(dim=dim, a=b, b=b_next), dtype=float)
-                dC1_edges_added = int(eigs_next.size - eigs.size)
-            else:
-                dC1_edges_added = 0
-            
+
+            # dC1(a,b) = dim C_1^b - dim C_1^a ; dim C_1^b = size of the Hodge Laplacian of K_b (a=b)
+            size_b = np.asarray(K.spectra(dim=dim, a=b, b=b), dtype=float).size
+            dC1_edges_added = int(size_b - eigs.size)
+                        
             row = {
                     "a": a,
-                    "b": b,
                     "delta_ab": float(b - a),   
                     "dim": int(dim),
                     "sample_id": int(sample_id),
@@ -76,7 +73,7 @@ def main():
 
     df = pd.DataFrame(rows)
     if not df.empty:
-        df = df.sort_values(["sample_id", "a", "b"]).reset_index(drop=True)
+        df = df.sort_values(["sample_id", "a"]).reset_index(drop=True)
 
     df.to_parquet(out_path, index=False)
     print(f"Wrote {len(df)} rows to {out_path}")
