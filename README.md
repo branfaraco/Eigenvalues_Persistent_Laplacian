@@ -1,4 +1,4 @@
-# Thesis Code — Persistent Laplacians
+# Thesis Code — Computationally exploring higher order spectra of persistent Laplacians
 
 This repo contains the code for my BEng thesis at Imperial College London. Below is a map of the folders and how they connect to the thesis chapters.
 
