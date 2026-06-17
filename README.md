@@ -33,4 +33,4 @@ Experiments with random pairs of simplicial complexes.
 
 ## External library: PETLS
 
-All experiments use [PETLS](https://github.com/bdjones13/PETLS) (Jones and Wei, 2025) to compute persistent Laplacian spectra. It is not included in this repo. The documentation can be found [here](https://www.benjones-math.com/software/PETLS/index.html) Appendix A of the thesis lists some issues found while using it.
+All experiments use [PETLS](https://github.com/bdjones13/PETLS) (Jones and Wei, 2025) to compute persistent Laplacian spectra. It is not included in this repo. The documentation can be found [here](https://www.benjones-math.com/software/PETLS/index.html). Appendix A of the thesis lists some issues found while using it.
